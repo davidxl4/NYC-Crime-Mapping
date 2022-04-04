@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>NYC Crime Map</title>
+
+    <!--- CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=[REPLACE ME WITH YOUR OWN KEY]"
+      async
+      defer
+    ></script>
+    <!--Google Maps API needed here! -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""
+    />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script
+      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet-src.js"
+      integrity="sha512-I5Hd7FcJ9rZkH7uD01G3AjsuzFy3gqz7HIJvzFZGFt2mrCS4Piw9bYZvCgUE0aiJuiZFYIJIwpbNnDIM6ohTrg=="
+      crossorigin=""
+    ></script>
+    <script src="node_modules/leaflet.gridlayer.googlemutant/dist/Leaflet.GoogleMutant.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>NYC Crime Map</h1>
+      </div>
+      <div class="content">
+        <div class="map">
+          <div id="map"></div>
+          <script>
+            var map = L.map("map").setView([40.7128, -74.0059], 11);
+
+            var roads = L.gridLayer
+              .googleMutant({
+                type: "roadmap", // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+              })
+              .addTo(map);
+          </script>
+        </div>
+        <div class="sidebar">
+          <div class="sidebar-header">
+            <h1>Crime Stats and Filtering</h1>
+          </div>
+          <div class="Filtering">
+            <div class="Filtering-header">
+              <h2>Filtering</h2>
+            </div>
+            <div class="Filtering-content">
+              <div class="Filtering-content-header">
+                <h3>Source</h3>
+                <!-- Where data is pulled from -->
+              </div>
+              <div class="Filtering-content-content">
+                <div class="Filtering-content-content-checkbox">
+                  <input
+                    type="checkbox"
+                    id="crimestat"
+                    name="crimestat"
+                    value="crimestat"
+                    onclick="filter()"
+                  />
+                  <label for="crimestat">CRIMESTAT</label>
+                </div>
+                <div class="Filtering-content-content-checkbox">
+                  <input
+                    type="checkbox"
+                    id="twitter"
+                    name="twitter"
+                    value="twitter"
+                    onclick="filter()"
+                  />
+                  <label for="robbery">Twitter</label>
+                </div>
+                <div class="Filtering-content-header">
+                  <h3>Crime Type</h3>
+                  <!-- This will allow filtering by crime type -->
+                </div>
+                <div class="Filtering-content-content">
+                  <div class="Filtering-content-content-checkbox">
+                    <input
+                      type="checkbox"
+                      id="assault"
+                      name="assault"
+                      value="assault"
+                      onclick="filter()"
+                    />
+                    <label for="assault">Assault</label>
+                  </div>
+                  <div class="Filtering-content-content-checkbox">
+                    <input
+                      type="checkbox"
+                      id="robbery"
+                      name="robbery"
+                      value="robbery"
+                      onclick="filter()"
+                    />
+                    <label for="robbery">Robbery</label>
+                  </div>
+                  <div class="Filtering-content-content-checkbox">
+                    <input
+                      type="checkbox"
+                      id="burglary"
+                      name="burglary"
+                      value="burglary"
+                      onclick="filter()"
+                    />
+                    <label for="burglary">Burglary</label>
+                  </div>
+                  <dive class="Filtering-content-content-checkbox">
+                    <input
+                      type="checkbox"
+                      id="shooting"
+                      name="shooting"
+                      value="shooting"
+                      onclick="filter()"
+                    />
+                    <label for="shooting">Shooting</label>
+                    <div class="stats">
+                      <h2>Crime Stats</h2>
+                      <div class="stats-container">
+                        <div class="stats-item">
+                          <h3>Number of Crimes total</h3>
+                          <p>
+                            <span id="crimes-count">0</span>
+                          </p>
+                        </div>
+                        <div class="stats-item">
+                          <h3>Number of Crimes by filter</h3>
+                          <p>
+                            <span id="crimes-filtered-count">0</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div></dive
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

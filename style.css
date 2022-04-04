@@ -1,0 +1,49 @@
+body {
+    background: #303030;
+    color: #ffffff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: none;
+    width: 100%;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+}
+
+.content {
+    padding: 15px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.header {
+    padding: 20px;
+}
+
+.sidebar {
+    padding: 10px;
+}
+
+.map {
+    background: #661818;
+    height: 500px;
+    width: 100%;
+    max-width: 700px;
+    padding: 10px;
+    float: left;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
