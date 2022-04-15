@@ -4,29 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta favicon="favicon.ico" />
     <title>NYC Crime Map</title>
 
     <!--- CSS -->
     <link rel="stylesheet" href="style.css" />
+
+    <!--Google Maps API needed here! -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=[REPLACE ME WITH YOUR OWN KEY]"
+      src="https://maps.googleapis.com/maps/api/js?key=[KEY]"
       async
       defer
     ></script>
-    <!--Google Maps API needed here! -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-      crossorigin=""
-    />
+
+    <!-- Load Leaflet CSS -->
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
     <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script
-      src="https://unpkg.com/leaflet@1.7.1/dist/leaflet-src.js"
-      integrity="sha512-I5Hd7FcJ9rZkH7uD01G3AjsuzFy3gqz7HIJvzFZGFt2mrCS4Piw9bYZvCgUE0aiJuiZFYIJIwpbNnDIM6ohTrg=="
-      crossorigin=""
-    ></script>
+    <script src="node_modules/leaflet/dist/leaflet.js"></script>
+
+    <!--- Google Mutant -->
     <script src="node_modules/leaflet.gridlayer.googlemutant/dist/Leaflet.GoogleMutant.js"></script>
+
+    <!-- load jQuery, use newest version at https://code.jquery.com   -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Load Esri Leaflet, use newest version at http://esri.github.io/esri-leaflet -->
+    <script src="node_modules/esri-leaflet/dist/esri-leaflet.js"></script>
   </head>
   <body>
     <div class="container">
@@ -38,12 +41,61 @@
           <div id="map"></div>
           <script>
             var map = L.map("map").setView([40.7128, -74.0059], 11);
+            // Add scale
+            L.control.scale().addTo(map);
 
             var roads = L.gridLayer
               .googleMutant({
                 type: "roadmap", // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
               })
               .addTo(map);
+
+            var geojsonMarkerOptions = {
+              radius: 8,
+              fillColor: "#ff7800",
+              color: "#000",
+              weight: 1,
+              opacity: 1,
+              fillOpacity: 0.8,
+            };
+
+            $.getJSON(
+              "https://data.cityofnewyork.us/resource/wkd5-g5vv.json?ofns_desc=FELONY ASSAULT&$limit=10000",
+              function (data) {
+                // Array of markers
+                var markers = [];
+
+                // For each row in the list, create a marker
+                for (var i = 0; i < data.length; i++) {
+                  var item = data[i];
+
+                  // Extract coordinates, convert strings to floats
+                  var coordinates = [
+                    parseFloat(item.latitude),
+                    parseFloat(item.longitude),
+                  ];
+
+                  // Create a marker with a custom icon
+                  var marker = L.marker(coordinates, {
+                    icon: L.icon({
+                      iconUrl: "images/attack.png",
+                      iconSize: [24, 24],
+                      iconAnchor: [12, 12],
+                      opacity: 0.5,
+                    }),
+                  }).bindTooltip(
+                    item.cmplnt_fr_dt + "<br>" + item.pd_desc //What data to show in the tooltip
+                  );
+
+                  // Add marker to the array of markers
+                  markers.push(marker);
+                }
+
+                // Create a Leaflet layer group from array of markers
+                var layer = L.layerGroup(markers);
+                layer.addTo(map); // add layer to the map
+              }
+            );
           </script>
         </div>
         <div class="sidebar">

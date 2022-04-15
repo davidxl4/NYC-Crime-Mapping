@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "esri-leaflet": "^3.0.8",
     "leaflet.gridlayer.googlemutant": "^0.13.5"
   }
 }
